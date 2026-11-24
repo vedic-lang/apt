@@ -18,6 +18,18 @@ APT includes Vedic in subsequent upgrades. To remove this source, run `sudo rm /
 
 **Archive key fingerprint** `0127 717E 292B 79AB 37A4 2569 1896 6A86 0792 F8D9`. Inspect the [public key](./vedic-archive-key.asc) with `gpg --show-keys --fingerprint vedic-archive-key.asc`.
 
+## Find older versions
+
+After updating the package lists, run `apt-cache madison vedic` to see the versions available from APT. For example, on a fresh system, `sudo apt install vedic=2.0.6-1` selects the 2.0.6 release. A plain `sudo apt install vedic` selects the latest candidate.
+
+Three releases remain available as direct downloads because of their package metadata.
+
+| GitHub release | Debian package metadata |
+| --- | --- |
+| [2.0.5](https://github.com/vedic-lang/vedic/releases/tag/v2.0.5) | The Debian version is `2.0.4`, which collides with the original 2.0.4 package. |
+| [1.2.2](https://github.com/vedic-lang/vedic/releases/tag/v1.2.2) | The package is named `vedic-lang` and declares `Architecture: all`, although its executable is x86-64. |
+| [1.2.0](https://github.com/vedic-lang/vedic/releases/tag/v1.2.0) | The package is named `vedic` and declares `Architecture: all`, although its executable is x86-64. |
+
 ## Publish a release
 
 1. Add a row to [packages.tsv](./packages.tsv) with the upstream release tag, exact Debian package version, architecture, asset name and SHA-256 from the release. Retain previous versions and use a new Debian revision when package bytes change.
