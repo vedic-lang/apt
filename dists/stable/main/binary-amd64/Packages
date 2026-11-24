@@ -1,5 +1,39 @@
 Package: vedic
 Architecture: amd64
+Version: 1.2.0-1
+Priority: optional
+Section: interpreters
+Maintainer: Pt. Prashant Tripathi <ptprashanttripathi@outlook.com>
+Depends: libc6 (>= 2.34), libgcc-s1 (>= 3.4), libstdc++6 (>= 4.8)
+Conflicts: vedic-lang (<= 1.2.2)
+Replaces: vedic-lang (<= 1.2.2)
+Filename: pool/main/v/vedic/vedic_1.2.0-1_amd64.deb
+Size: 11031836
+MD5sum: f946f0b2b196db87cd6c307badb16d28
+SHA1: ecbaac7cb309ea05b1d7383972c50ebcde8d25d5
+SHA256: e05a88558eea9e91771a01d5dd4f4408f5e95da3b8a22ac922d4f5be1c315abe
+SHA512: 80ec6070709516ed07809c48d500af4a3e56e1fa2d244c329372c5a8b14d8b66394d073ffd294a24e15f22db1f7ef185870a7530ea8736f66035827f472c8a68
+Description: Sanskrit programming language interpreter
+
+Package: vedic
+Architecture: amd64
+Version: 1.2.2-1
+Priority: optional
+Section: interpreters
+Maintainer: Pt. Prashant Tripathi <ptprashanttripathi@outlook.com>
+Depends: libc6 (>= 2.34), libgcc-s1 (>= 3.4), libstdc++6 (>= 4.8)
+Conflicts: vedic-lang (<= 1.2.2)
+Replaces: vedic-lang (<= 1.2.2)
+Filename: pool/main/v/vedic/vedic_1.2.2-1_amd64.deb
+Size: 11031852
+MD5sum: cdcff1bbb24fee6d55b666bdcf277739
+SHA1: 379bdb809303efc13dd0e2ef7c1e5c42db26b39c
+SHA256: f3e8611a56227aecde9b9afe690115d15dfff29545067af1d8155a0344fa8e00
+SHA512: 81b48a070273d781749a2d81ef245653d5777449bed82fe37a2a1d323ad0e79eb8749e24673ec1d7e3364342f76da5e73fb0d090f36ad047b8e4cdf77d42e810
+Description: Sanskrit programming language interpreter
+
+Package: vedic
+Architecture: amd64
 Version: 2.0.4
 Priority: optional
 Section: utility
@@ -15,6 +49,23 @@ SHA512: e99e2c582e6f126adc72e72e6231b6076ecfd38ba9c1d07ce00b3d5b7e4f8e77f91156c2
 Description: Vedic is World first Programming launguage in Sanskrit
  Vedic is World first Programming launguage in Sanskrit
  building Debian packages from Rust projects.
+
+Package: vedic
+Architecture: amd64
+Version: 2.0.5-1
+Priority: optional
+Section: interpreters
+Maintainer: Pt. Prashant Tripathi <ptprashanttripathi@outlook.com>
+Depends: libc6 (>= 2.34), libgcc-s1 (>= 4.2)
+Conflicts: vedic-lang (<= 1.2.2)
+Replaces: vedic-lang (<= 1.2.2)
+Filename: pool/main/v/vedic/vedic_2.0.5-1_amd64.deb
+Size: 222752
+MD5sum: 3e3e0e5e4a25c0d2eb60503f60c1ce48
+SHA1: b8fba66ccf7974f0f79be06af150fbfb7b41eb99
+SHA256: b49ffc29007e88c9fe0133075ba402cec88e46fb9183aecb294f87688b949954
+SHA512: f786d485806ad039f1e61ad12765fded9bdf9a5edc6bfc40f566d5489d28e724b6a06e191ea1e422120b70f9f6cc00db91a59762c295ca2763be70715159c350
+Description: Sanskrit programming language interpreter
 
 Package: vedic
 Architecture: amd64
