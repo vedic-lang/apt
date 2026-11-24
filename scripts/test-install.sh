@@ -56,6 +56,16 @@ check_install() {
     test "$(dpkg-query -W -f='${Version}' vedic)" = "$version"
     test "$(vedic --version)" = "$cli_version"
     test "$(vedic /tmp/hello.ved)" = 'नमस्ते विश्व!'
+    if [[ "$version" == 3.0.0-* ]]; then
+        printf '%s\n' 'आवाहन "hello.ved";' > /tmp/import.ved
+        test "$(vedic /tmp/import.ved)" = 'नमस्ते विश्व!'
+        printf '%s\n' 'अवहन "hello.ved";' > /tmp/import.ved
+        local status=0
+        vedic /tmp/import.ved > /tmp/output 2>/tmp/error || status=$?
+        test "$status" = 65
+        test ! -s /tmp/output
+        grep -Fq "insert ';' here" /tmp/error
+    fi
     printf 'Installed vedic %s and ran Hello World.\n' "$version"
 }
 
