@@ -5,7 +5,7 @@ Acquire-By-Hash: yes
 Architectures: amd64
 Codename: stable
 Components: main
-Date: Tue, 24 Nov 2026 08:05:40 +0000
+Date: Tue, 24 Nov 2026 08:21:23 +0000
 Label: Vedic
 Origin: Vedic
 Suite: stable
@@ -23,15 +23,15 @@ SHA512:
  adc2df6b9b508817f412fac932ae4bb1bd50a81feb8fccc335d168252e9d005ae9235d63b28297c73a6cf92828ee32c370b1da2a7ad2ca592eb90381e17c168e              498 main/binary-amd64/Packages.gz
 -----BEGIN PGP SIGNATURE-----
 
-iQHPBAEBCAA5FiEEOUU1IAwEHOjir0fHg6oLrT4wM8EFAmsFRXAbFIAAAAAABAAO
-bWFudTIsMi41KzEuMTIsMCwzAAoJEIOqC60+MDPBy0sL/iglqX4WWvPe/VosG63J
-xleUSuYHNi7FxBpYooYZ+7umyKckqed4FxtqZ3i/UtiLgn11y2yAETVErXw/6m/v
-TjD3yzOKbQYQ2OiTg12aRghumFWxd5Oe4aRh7aAALfiSPu4F+BIUS5qd0U9blHZq
-dERwOBmzczhXjiiBECV0hdi9CxdkgUsZVXtP/2ObpDeAUkQWxNvJH9zwTcHqBjW7
-gKYMdbX69qEJchd7pnYqdEKS5WTxg4n6iE/kvRU736K4AY39ouQkVkpR/5OYscDz
-bFEMjR/eAc3Rc6TgCt9wsIxoCPrPB8k5I+rptNAFp3Whwk3uGo6QmYrKqVrHf66o
-vQrAwyYBRtuAizoam8b5MJGMYa+bTly8vBiPe3Z4YqkqKTOzW4+TALQXDZF4PsTt
-pTxRjYl+yb8Q/0PF32jOpyzAfcxcd/DrZHko9gIHjcxG8nBzBI6xLOR3WGfI6IP8
-JVqJx7VpoADWd0VJiSd63onNin1bKPSktochdUYA+925pw==
-=/AWK
+iQGzBAEBCAAdFiEEOUU1IAwEHOjir0fHg6oLrT4wM8EFAmsFSRwACgkQg6oLrT4w
+M8EYDwv/eCBs+gI5UQ1xrejoC8aG0yEWDZgEB74vPq5o6vCV4IrjH7xC7247nOpR
+apYBt1D2bZtsDL5ras2NFK8zn1R7R+ocJzgLIiBlcKtgTF1afMIthc4rCwPMUFTL
+ymvkbaTMrXI+kk+ynTkFsY1g5EllLtzJ0g+9mx5XEe3n5dpAi30WYlXTiu/FviRB
+alpSw3kPl7f+lsHyZl2Sy9D6CIwr0sxTUoN0SUJNFSHcYVdEI1aYY4T7Wc16hnVr
+Bn/jgOf2MHUkg7kHz/yaok+JAlpZl39PuW5/KaTaE6qwAh2NPNH3BsDAyfz365hU
+hEzklivsdvlkfiDQcQW1qNF4QRieI7ORsjF1rxFLCTsTbhskaKIXkoDa1cKlGeBY
+FJKjxX/mIHRcUWvaYdmQppLh+tr2lnu1zOdALozZJcPS0AL6MxI8NdvoTbjaASrW
+8PeW3UvB+2caIJU0bRh5Zod+D9cpPevoOqPqYWYkspArMkjb8kYmGvnFFgyC55PM
+hekVHQg6
+=i0MH
 -----END PGP SIGNATURE-----
