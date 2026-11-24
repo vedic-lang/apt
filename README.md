@@ -37,7 +37,7 @@ All three install `/usr/bin/vedic`. The 1.x CLI reports its version as `v1.2.x`.
 ## Publish a release
 
 1. Add a row to [packages.tsv](./packages.tsv) with the upstream release tag, exact Debian package version, architecture, asset name and SHA-256 from the release. Retain previous versions and use a new Debian revision when package bytes change.
-   The historical recipe uses SHA-256-pinned inputs, a digest-pinned amd64 build image and fixed archive timestamps. The 2.0.5 source entry identifies the release commit.
+   For the corrected revisions, the manifest also pins the finished `.deb` SHA-256. The [packaging recipe](./packaging/build-historical-deb.sh) uses a digest-pinned amd64 build image and fixed timestamps. The 2.0.5 source entry identifies the release commit.
 2. Open a PR. CI downloads the pinned assets, validates their hashes and Debian control fields, creates APT indexes and installs the signed candidate in clean Debian and Ubuntu containers. Each test runs `vedic --version` and a Sanskrit Hello World program.
 3. Merging to `main` signs the tested indexes with the `APT_SIGNING_SUBKEY` environment secret, updates the publication branch `gh-pages`, requests a Pages build and checks installations over HTTPS. The `apt-signing` environment is restricted to the `main` branch. GitHub Pages serves the root of `gh-pages`.
 4. To exercise the published archive independently, add the `verify-live` label to an open PR. To republish the reviewed manifest, run the **Vedic APT archive** workflow on `main`.
