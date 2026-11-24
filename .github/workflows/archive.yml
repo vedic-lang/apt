@@ -1,0 +1,112 @@
+name: Vedic APT archive
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    if: github.event.action != 'labeled'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build package indexes
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y apt-utils
+          scripts/build-archive.sh unsigned
+      - name: Test signed installations on Debian and Ubuntu
+        run: |
+          export GNUPGHOME=$(mktemp -d)
+          trap 'gpgconf --kill all; rm -rf "$GNUPGHOME"' EXIT
+          gpg --batch --pinentry-mode loopback --passphrase '' --quick-gen-key 'APT CI' rsa3072 sign 1d
+          gpg --armor --export 'APT CI' > "$RUNNER_TEMP/ci-key.asc"
+          cp -R unsigned candidate
+          scripts/sign-archive.sh candidate "$RUNNER_TEMP/ci-key.asc"
+          scripts/test-install.sh candidate
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: unsigned-archive
+          path: unsigned/
+          include-hidden-files: true
+          retention-days: 7
+
+  publish:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    environment: apt-signing
+    concurrency: apt-publication
+    permissions:
+      contents: write
+      pages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: unsigned-archive
+          path: site
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+          path: published
+      - name: Sign release metadata
+        env:
+          APT_SIGNING_SUBKEY: ${{ secrets.APT_SIGNING_SUBKEY }}
+        run: |
+          export GNUPGHOME=$(mktemp -d)
+          trap 'gpgconf --kill all; rm -rf "$GNUPGHOME"' EXIT
+          printf '%s\n' "$APT_SIGNING_SUBKEY" | gpg --batch --import
+          unset APT_SIGNING_SUBKEY
+          scripts/sign-archive.sh site vedic-archive-key.asc
+      - name: Publish the signed snapshot
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [[ $(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq .sha) != "$GITHUB_SHA" ]]; then
+            echo "A newer main commit superseded this snapshot."
+            exit 0
+          fi
+          for file in site/pool/main/v/vedic/*.deb; do
+            prior="published/${file#site/}"
+            if [[ -f "$prior" ]]; then cmp "$file" "$prior"; fi
+          done
+          # Keep old by-hash indexes and packages available to clients with cached metadata.
+          cp -a site/. published/
+          git -C published add --all
+          if ! git -C published diff --cached --quiet; then
+            git -C published -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              commit -m "Publish Vedic APT archive from ${GITHUB_SHA:0:12}"
+            git -C published push origin HEAD:gh-pages
+          fi
+          # Pushes made with GITHUB_TOKEN need an explicit Pages build.
+          gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds" --silent
+          for attempt in {1..60}; do
+            if curl -fsSL "https://vedic-lang.github.io/apt/dists/stable/InRelease?build=$GITHUB_RUN_ID-$attempt" | cmp -s - site/dists/stable/InRelease; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Timed out waiting for the signed snapshot on Pages" >&2
+          exit 1
+
+  verify-live:
+    needs: publish
+    if: >-
+      always() && (needs.publish.result == 'success' ||
+      (github.event.action == 'labeled' && github.event.label.name == 'verify-live'))
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: scripts/test-install.sh live
