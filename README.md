@@ -14,6 +14,8 @@ sudo apt install vedic
 vedic --version
 ```
 
+Vedic 3.0 uses `आवाहन` for file imports. When upgrading a 2.x program, replace each `अवहन` import with `आवाहन`.
+
 APT includes Vedic in subsequent upgrades. To remove this source, run `sudo rm /etc/apt/sources.list.d/vedic.sources` and `sudo apt update`.
 
 **Archive key fingerprint** `0127 717E 292B 79AB 37A4 2569 1896 6A86 0792 F8D9`. Inspect the [public key](./vedic-archive-key.asc) with `gpg --show-keys --fingerprint vedic-archive-key.asc`.
