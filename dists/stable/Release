@@ -2,19 +2,19 @@ Acquire-By-Hash: yes
 Architectures: amd64
 Codename: stable
 Components: main
-Date: Tue, 24 Nov 2026 08:21:23 +0000
+Date: Tue, 24 Nov 2026 09:05:14 +0000
 Label: Vedic
 Origin: Vedic
 Suite: stable
 MD5Sum:
- 6569b9402695c0584531018d91e307eb              745 main/binary-amd64/Packages
- 06b3a08a9ff0f4aaf5844a017080b042              498 main/binary-amd64/Packages.gz
+ 47f0ba5ac534cd4c9caa53ab63504d66             2209 main/binary-amd64/Packages
+ 8dc7a67c18c0ead396f5f1dee7dc8b79              921 main/binary-amd64/Packages.gz
 SHA1:
- 15d0567f1bdadfa30dda01c3e7d2ab9ff33ac9bf              745 main/binary-amd64/Packages
- c92a70fe3e735724768ee3aea6ee05151bffb764              498 main/binary-amd64/Packages.gz
+ 83826bb52fe5d61a168e4042f0b018bf13a8a4bb             2209 main/binary-amd64/Packages
+ d43f8bb3a5dd58a2cba0eb84ae4e870cc24c181b              921 main/binary-amd64/Packages.gz
 SHA256:
- e73e92cee214017d2159f53c182fa344f3df38dd05df3d0809e50927aa6e92f4              745 main/binary-amd64/Packages
- e32ade08e8e596ac0186d6bdbe44a67fb4a39729632f196fe051a557f9cad537              498 main/binary-amd64/Packages.gz
+ 8d1de1745274f8d2d69ddfc6bfdb3bb1793df57fbc27b21f5c15097933e00556             2209 main/binary-amd64/Packages
+ c02339090beb936f9f57b01d769054da832489d5d41911652bee40c624939df0              921 main/binary-amd64/Packages.gz
 SHA512:
- be08a68bdc4fb6254505560a9751111bbb9bfd78b9568295a98fa50fead4ea2bbfcbb791371f4c33c69c0e5b0852200db1115301ccced674744b05940fa99990              745 main/binary-amd64/Packages
- adc2df6b9b508817f412fac932ae4bb1bd50a81feb8fccc335d168252e9d005ae9235d63b28297c73a6cf92828ee32c370b1da2a7ad2ca592eb90381e17c168e              498 main/binary-amd64/Packages.gz
+ 2f5e493ff739e0239a5d51b1c5b8bfeb4adcb88d7e4adadbdcbb62189a90d93696d130f84cd9ac6e3de2e1160ee7bf60702b643776d3174434e688dbbfdc629b             2209 main/binary-amd64/Packages
+ 522143b89a2e944072dda9803cb32820c8a8e352d0e9075876e2cde7ba9f358150b00044a30d90065aec749fa5dc6b29a0355f3766738979ea653ac0fe4976ff              921 main/binary-amd64/Packages.gz
