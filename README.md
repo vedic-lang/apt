@@ -1,6 +1,6 @@
 # Vedic APT repository
 
-Install the Vedic CLI on amd64 (Intel/AMD 64-bit) Debian 13 and Ubuntu 24.04. The archive distributes the Debian package from the [official Vedic releases](https://github.com/vedic-lang/vedic/releases). Vedic 2.1.0 requires glibc 2.38 or newer.
+Install the Vedic CLI on amd64 (Intel/AMD 64-bit) Debian 13 and Ubuntu 24.04. The archive distributes packages from the [official Vedic releases](https://github.com/vedic-lang/vedic/releases), including corrected revisions of three historical releases. Vedic 2.1.0 requires glibc 2.38 or newer.
 
 ## Install
 
@@ -22,17 +22,22 @@ APT includes Vedic in subsequent upgrades. To remove this source, run `sudo rm /
 
 After updating the package lists, run `apt-cache madison vedic` to see the versions available from APT. For example, on a fresh system, `sudo apt install vedic=2.0.6-1` selects the 2.0.6 release. A plain `sudo apt install vedic` selects the latest candidate.
 
-Three releases remain available as direct downloads because of their package metadata.
+### Corrected historical packages
 
-| GitHub release | Debian package metadata |
+On a fresh amd64 installation, choose any of these versions by its full Debian version. For example, run `sudo apt install vedic=1.2.2-1`.
+
+| Debian version | Package contents |
 | --- | --- |
-| [2.0.5](https://github.com/vedic-lang/vedic/releases/tag/v2.0.5) | The Debian version is `2.0.4`, which collides with the original 2.0.4 package. |
-| [1.2.2](https://github.com/vedic-lang/vedic/releases/tag/v1.2.2) | The package is named `vedic-lang` and declares `Architecture: all`, although its executable is x86-64. |
-| [1.2.0](https://github.com/vedic-lang/vedic/releases/tag/v1.2.0) | The package is named `vedic` and declares `Architecture: all`, although its executable is x86-64. |
+| `2.0.5-1` | Built from the [v2.0.5 source](https://github.com/vedic-lang/vedic/tree/bc104d81759fb56e26f4d968aa087936ce37056c), with the CLI version updated from 2.0.4 to 2.0.5 in the Cargo manifest and lockfile. |
+| `1.2.2-1` | The original [v1.2.2 executable](https://github.com/vedic-lang/vedic/releases/tag/v1.2.2), packaged as `vedic` for amd64. It replaces the historical `vedic-lang` package. |
+| `1.2.0-1` | The original [v1.2.0 executable](https://github.com/vedic-lang/vedic/releases/tag/v1.2.0), packaged for amd64. |
+
+All three install `/usr/bin/vedic`. The 1.x CLI reports its version as `v1.2.x`. For Hello World, use `वद् "नमस्ते विश्व!";` in 1.2.0 and `वद "नमस्ते विश्व!";` in 1.2.2.
 
 ## Publish a release
 
 1. Add a row to [packages.tsv](./packages.tsv) with the upstream release tag, exact Debian package version, architecture, asset name and SHA-256 from the release. Retain previous versions and use a new Debian revision when package bytes change.
+   For the corrected revisions, the manifest also pins the finished `.deb` SHA-256. The [packaging recipe](./packaging/build-historical-deb.sh) uses a digest-pinned amd64 build image and fixed timestamps. The 2.0.5 source entry identifies the release commit.
 2. Open a PR. CI downloads the pinned assets, validates their hashes and Debian control fields, creates APT indexes and installs the signed candidate in clean Debian and Ubuntu containers. Each test runs `vedic --version` and a Sanskrit Hello World program.
 3. Merging to `main` signs the tested indexes with the `APT_SIGNING_SUBKEY` environment secret, updates the publication branch `gh-pages`, requests a Pages build and checks installations over HTTPS. The `apt-signing` environment is restricted to the `main` branch. GitHub Pages serves the root of `gh-pages`.
 4. To exercise the published archive independently, add the `verify-live` label to an open PR. To republish the reviewed manifest, run the **Vedic APT archive** workflow on `main`.

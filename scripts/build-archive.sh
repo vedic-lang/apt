@@ -9,15 +9,34 @@ pool=pool/main/v/vedic
 dist=dists/stable
 index=$dist/main/binary-amd64
 mkdir -p "$pool" "$index"
-while read -r tag version arch asset digest; do
+scratch=$(mktemp -d)
+trap 'rm -rf "$scratch"' EXIT
+while read -r tag version arch asset digest rebuilt_digest; do
     [[ -z "$tag" || "$tag" == \#* ]] && continue
-    [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ && "$arch" == amd64 && "$asset" == vedic-linux-x86_64.deb ]]
+    [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ && "$arch" == amd64 ]]
     [[ "$version" =~ ^[0-9][0-9A-Za-z.+~-]*$ && "$digest" =~ ^[0-9a-f]{64}$ ]]
+    [[ "$version" == "${tag#v}" || "$version" == "${tag#v}-"* ]]
     package="$pool/vedic_${version}_${arch}.deb"
     test ! -e "$package"
-    curl --fail --silent --show-error --location --retry 3 \
-        "https://github.com/vedic-lang/vedic/releases/download/$tag/$asset" -o "$package"
-    echo "$digest  $package" | sha256sum --check
+    if [[ "$asset" =~ ^source@([0-9a-f]{40})$ ]]; then
+        url="https://codeload.github.com/vedic-lang/vedic/tar.gz/${BASH_REMATCH[1]}"
+    else
+        [[ "$asset" =~ ^[a-zA-Z0-9._-]+\.deb$ ]]
+        url="https://github.com/vedic-lang/vedic/releases/download/$tag/$asset"
+    fi
+    curl --fail --silent --show-error --location --retry 3 "$url" -o "$scratch/input"
+    echo "$digest  $scratch/input" | sha256sum --check
+    if [[ "$asset" == vedic-linux-x86_64.deb ]]; then
+        test -z "$rebuilt_digest"
+        mv "$scratch/input" "$package"
+    else
+        [[ "$rebuilt_digest" =~ ^[0-9a-f]{64}$ ]]
+        docker run --rm --platform linux/amd64 --user "$(id -u):$(id -g)" \
+            -v "$root/packaging:/recipe:ro" -v "$scratch/input:/input:ro" -v "$PWD/$pool:/out" \
+            rust:1.73.0-bookworm@sha256:e5a28b9e772535dc50205b4684b4e1cd113bb52e02e54ff387015c55c561e477 \
+            /recipe/build-historical-deb.sh "$version"
+        echo "$rebuilt_digest  $package" | sha256sum --check
+    fi
     test "$(dpkg-deb -f "$package" Package)" = vedic
     test "$(dpkg-deb -f "$package" Version)" = "$version"
     test "$(dpkg-deb -f "$package" Architecture)" = "$arch"

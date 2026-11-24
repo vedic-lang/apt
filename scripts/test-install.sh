@@ -14,9 +14,15 @@ if [[ "$target" == live ]]; then
         sed -e 's/^ //' -e 's/^\.$//' > "$scratch/archive.asc"
     cmp "$(dirname "$0")/../vedic-archive-key.asc" "$scratch/archive.asc"
 else
-    expected_versions=$(awk '!/^#/ && NF { print $2 }' "$(dirname "$0")/../packages.tsv" | sort -V)
+    manifest="$(dirname "$0")/../packages.tsv"
+    expected_versions=$(awk '!/^#/ && NF { print $2 }' "$manifest" | sort -V)
+    # Exercise the package rename with the actual 1.2.2 installer.
+    read -r tag _ _ asset digest _ < <(awk '$1 == "v1.2.2"' "$manifest")
+    curl --fail --silent --show-error --location --retry 3 \
+        "https://github.com/vedic-lang/vedic/releases/download/$tag/$asset" -o "$scratch/legacy.deb"
+    echo "$digest  $scratch/legacy.deb" | sha256sum --check
     site=$(cd "$target" && pwd)
-    mounts=(-v "$site:/archive:ro")
+    mounts=(-v "$site:/archive:ro" -v "$scratch/legacy.deb:/tmp/legacy-1.2.2.deb:ro")
     sed 's|^URIs: .*|URIs: file:/archive|' "$site/vedic.sources" > "$scratch/vedic.sources"
 fi
 chmod 644 "$scratch/vedic.sources"
@@ -38,11 +44,17 @@ versions=$(apt-cache "${options[@]}" madison vedic | awk '{print $3}' | sort -Vu
 test -n "$versions"
 if [[ -n "$EXPECTED_VERSIONS" ]]; then test "$versions" = "$EXPECTED_VERSIONS"; fi
 
-printf 'वद("नमस्ते विश्व!");\n' > /tmp/hello.ved
 check_install() {
-    local version=$1
+    local version=$1 cli_version="Vedic v${1%-*}" program='वद("नमस्ते विश्व!");'
+    case "$version" in
+        1.2.0-*) cli_version="v1.2.0"; program='वद् "नमस्ते विश्व!";' ;;
+        1.2.2-*) cli_version="v1.2.2"; program='वद "नमस्ते विश्व!";' ;;
+    esac
+    printf '%s\n' "$program" > /tmp/hello.ved
+    test "$(command -v vedic)" = /usr/bin/vedic
+    test "$(dpkg-query -W -f='${Architecture}' vedic)" = amd64
     test "$(dpkg-query -W -f='${Version}' vedic)" = "$version"
-    test "$(vedic --version)" = "Vedic v${version%-*}"
+    test "$(vedic --version)" = "$cli_version"
     test "$(vedic /tmp/hello.ved)" = 'नमस्ते विश्व!'
     printf 'Installed vedic %s and ran Hello World.\n' "$version"
 }
@@ -54,6 +66,19 @@ while IFS= read -r version; do
     if [[ "$version" == "$current" ]]; then continue; fi
     apt-get "${options[@]}" install -y --allow-downgrades "vedic=$version"
     check_install "$version"
+    apt-get "${options[@]}" install -y vedic
+    check_install "$current"
 done <<< "$versions"
+
+if [[ -f /tmp/legacy-1.2.2.deb ]]; then
+    apt-get "${options[@]}" remove -y vedic
+    dpkg -i /tmp/legacy-1.2.2.deb
+    test -x /usr/local/bin/vedic
+    apt-get "${options[@]}" install -y vedic=1.2.2-1
+    test ! -e /usr/local/bin/vedic
+    check_install 1.2.2-1
+    apt-get "${options[@]}" install -y vedic
+    check_install "$current"
+fi
 TEST
 done
