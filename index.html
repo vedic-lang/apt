@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install Vedic with APT</title>
+<style>
+  :root {color-scheme:light dark; font:17px/1.6 system-ui,sans-serif}
+  body {max-width:44rem; margin:8vh auto; padding:0 1.2rem}
+  h1 {line-height:1.2} pre {padding:1rem; overflow:auto; background:#7641db12; border-inline-start:3px solid #7641db}
+  a {color:inherit}
+</style>
+<main>
+  <h1>Install Vedic with APT</h1>
+  <p>Install the Vedic programming language on 64-bit Intel or AMD systems running Debian 13 or Ubuntu 24.04.</p>
+  <pre><code>curl -fsSLo vedic.sources https://vedic-lang.github.io/apt/vedic.sources
+sudo install -m 0644 vedic.sources /etc/apt/sources.list.d/vedic.sources
+sudo apt update
+sudo apt install vedic
+vedic --version</code></pre>
+  <p>The source file includes Vedic’s public signing key. APT uses it to verify package updates.</p>
+  <p><a href="vedic.sources">APT source file</a> · <a href="vedic-archive-key.asc">Public signing key</a> · <a href="https://github.com/vedic-lang/apt">Repository</a> · <a href="https://vedic-lang.github.io/hello-world">First program</a></p>
+</main>
+</html>

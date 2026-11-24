@@ -1,0 +1,18 @@
+Package: vedic
+Architecture: amd64
+Version: 2.1.0-1
+Priority: optional
+Section: utility
+Maintainer: Pt. Prashant Tripathi <ptprashanttripathi@outlook.com>
+Installed-Size: 547
+Depends: libc6 (>= 2.38)
+Filename: pool/main/v/vedic/vedic_2.1.0-1_amd64.deb
+Size: 232156
+MD5sum: 3cd5211fc0319b78b4ce6a836c5b8cdf
+SHA1: 3a09851293ddaaa87c13b89d17414476758a9eaa
+SHA256: 70c3e603e9db9c675d97dd39234280ac4227b1ac48cdea4f7091e19d375f6b56
+SHA512: 46b427423a165f378b412bfa8eac7efbe0205ba46af40051a241b8ee902da0ca0f56d9e06534546c94f247b5bbc72b70e994516f0114eedba150fc11518de177
+Description: A Sanskrit programming language interpreter written in Rust
+ A Sanskrit programming language interpreter written in Rust.
+ building Debian packages from Rust projects.
+
