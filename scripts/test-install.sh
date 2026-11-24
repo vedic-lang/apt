@@ -38,11 +38,17 @@ versions=$(apt-cache "${options[@]}" madison vedic | awk '{print $3}' | sort -Vu
 test -n "$versions"
 if [[ -n "$EXPECTED_VERSIONS" ]]; then test "$versions" = "$EXPECTED_VERSIONS"; fi
 
-printf 'वद("नमस्ते विश्व!");\n' > /tmp/hello.ved
 check_install() {
-    local version=$1
+    local version=$1 cli_version="Vedic v${1%-*}" program='वद("नमस्ते विश्व!");'
+    case "$version" in
+        1.2.0-*) cli_version="v1.2.0"; program='वद् "नमस्ते विश्व!";' ;;
+        1.2.2-*) cli_version="v1.2.2"; program='वद "नमस्ते विश्व!";' ;;
+    esac
+    printf '%s\n' "$program" > /tmp/hello.ved
+    test "$(command -v vedic)" = /usr/bin/vedic
+    test "$(dpkg-query -W -f='${Architecture}' vedic)" = amd64
     test "$(dpkg-query -W -f='${Version}' vedic)" = "$version"
-    test "$(vedic --version)" = "Vedic v${version%-*}"
+    test "$(vedic --version)" = "$cli_version"
     test "$(vedic /tmp/hello.ved)" = 'नमस्ते विश्व!'
     printf 'Installed vedic %s and ran Hello World.\n' "$version"
 }
@@ -54,6 +60,8 @@ while IFS= read -r version; do
     if [[ "$version" == "$current" ]]; then continue; fi
     apt-get "${options[@]}" install -y --allow-downgrades "vedic=$version"
     check_install "$version"
+    apt-get "${options[@]}" install -y vedic
+    check_install "$current"
 done <<< "$versions"
 TEST
 done
