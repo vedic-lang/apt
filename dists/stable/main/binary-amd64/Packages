@@ -103,3 +103,21 @@ Description: A Sanskrit programming language interpreter written in Rust
  A Sanskrit programming language interpreter written in Rust.
  building Debian packages from Rust projects.
 
+Package: vedic
+Architecture: amd64
+Version: 3.0.0-1
+Priority: optional
+Section: utility
+Maintainer: Pt. Prashant Tripathi <ptprashanttripathi@outlook.com>
+Installed-Size: 568
+Depends: libc6 (>= 2.38)
+Filename: pool/main/v/vedic/vedic_3.0.0-1_amd64.deb
+Size: 237628
+MD5sum: fcbc798ea7820a148e55f2e2b38ac378
+SHA1: a228dd8d8d89393baba68728f94e1315c7bd3cd8
+SHA256: 817e07ff00ca26b07baeb93e1f95962049e0c8630083d6cd0ce79a8d7aa6bd57
+SHA512: fc88138616ab696e51f53be39f031751362b8cb246350102c03dc7293e306982c09add676ae9355212c355cd5d697b8aef9bd0b7bef66731b518f288658964d2
+Description: A Sanskrit programming language interpreter written in Rust
+ A Sanskrit programming language interpreter written in Rust.
+ building Debian packages from Rust projects.
+
